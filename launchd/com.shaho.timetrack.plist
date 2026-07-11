@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Autostart template — NOT for the first week. Run `bun start` manually
+  until you trust the tracking, then:
+
+  1. Replace BUN_PATH with the output of `which bun`
+  2. cp launchd/com.shaho.timetrack.plist ~/Library/LaunchAgents/
+  3. launchctl load ~/Library/LaunchAgents/com.shaho.timetrack.plist
+-->
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.shaho.timetrack</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>BUN_PATH</string>
+    <string>run</string>
+    <string>/Users/shaho/Desktop/dev/fable01/src/index.ts</string>
+  </array>
+  <key>RunAtLoad</key>
+  <true/>
+  <key>KeepAlive</key>
+  <true/>
+  <key>StandardOutPath</key>
+  <string>/tmp/timetrack.log</string>
+  <key>StandardErrorPath</key>
+  <string>/tmp/timetrack.err</string>
+</dict>
+</plist>
