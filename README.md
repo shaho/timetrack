@@ -1,5 +1,7 @@
 # timetrack
 
+[![CI](https://github.com/shaho/timetrack/actions/workflows/ci.yml/badge.svg)](https://github.com/shaho/timetrack/actions/workflows/ci.yml)
+
 Local-first macOS time tracker. A small Bun daemon samples the frontmost window every few seconds, merges consecutive samples into intervals (the [ActivityWatch](https://activitywatch.net/) heartbeat trick), and stores everything in a local SQLite database. No cloud, no accounts, no telemetry — your data never leaves your machine.
 
 **Stack:** Bun · TypeScript end-to-end · SQLite (`bun:sqlite`, WAL) · React + Vite dashboard · hand-rolled SVG charts (no chart library) · launchd for process supervision · zero native modules to compile.
@@ -50,12 +52,12 @@ bun run report 2026-07-09   # specific day
 
 Environment variables, all optional:
 
-| Variable | Default | Meaning |
-|---|---|---|
-| `TIMETRACK_POLL_MS` | `5000` | Sampling interval |
-| `TIMETRACK_MERGE_GAP_MS` | `15000` | Max gap to merge consecutive samples |
-| `TIMETRACK_AFK_SEC` | `120` | Idle seconds before counting as AFK |
-| `TIMETRACK_DB` | `~/Library/Application Support/timetrack/timetrack.db` | Database path |
+| Variable                 | Default                                                | Meaning                              |
+| ------------------------ | ------------------------------------------------------ | ------------------------------------ |
+| `TIMETRACK_POLL_MS`      | `5000`                                                 | Sampling interval                    |
+| `TIMETRACK_MERGE_GAP_MS` | `15000`                                                | Max gap to merge consecutive samples |
+| `TIMETRACK_AFK_SEC`      | `120`                                                  | Idle seconds before counting as AFK  |
+| `TIMETRACK_DB`           | `~/Library/Application Support/timetrack/timetrack.db` | Database path                        |
 
 ## Dashboard
 
