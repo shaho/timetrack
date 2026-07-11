@@ -33,13 +33,13 @@ const DEFAULT_RULES: Rule[] = [
   { category: "design", app: "^(Figma|Photoshop|Adobe)" },
 
   { category: "learning", app: "^Anki$" },
-  { category: "learning", url: "claude\\.ai|chatgpt\\.com|udemy|coursera|exercism|typingclub|keybr\\.com|monkeytype" },
+  { category: "learning", url: "youtube\\.com|claude\\.ai|chatgpt\\.com|udemy|coursera|exercism|typingclub|keybr\\.com|monkeytype" },
   { category: "learning", title: "langua|fluently|duolingo|nederlands|dutch" },
 
   { category: "communication", app: "^(Slack|Discord|Mail|Telegram|WhatsApp|Signal|Messages)$" },
   { category: "communication", url: "mail\\.google\\.com|outlook\\." },
 
-  { category: "distraction", url: "youtube\\.com/(?!.*(tutorial|course))|twitter\\.com|x\\.com/|reddit\\.com|instagram\\.com|netflix|twitch\\.tv" },
+  { category: "distraction", url: "twitter\\.com|x\\.com/|reddit\\.com|instagram\\.com|netflix|twitch\\.tv" },
   { category: "distraction", app: "^(TV|Music|Spotify)$" },
 ];
 

@@ -13,7 +13,7 @@ Local-first macOS time tracker. A small Bun daemon samples the frontmost window 
 ┌─────────────┐  idle sec        ▲                          │
 │ ioreg (HID  │──────────────────┘                   ┌──────▼───────┐
 │  IdleTime)  │                                      │  report CLI  │
-└─────────────┘                                      │ (later: web) │
+└─────────────┘                                      │  + API/web   │
                                                      └──────────────┘
 ```
 
@@ -51,6 +51,22 @@ Environment variables, all optional:
 | `TIMETRACK_AFK_SEC` | `120` | Idle seconds before counting as AFK |
 | `TIMETRACK_DB` | `~/Library/Application Support/timetrack/timetrack.db` | Database path |
 
+## Dashboard
+
+```sh
+bun run serve            # API + static dashboard on http://localhost:4242
+cd web && bun install
+bun run dev              # Vite dev server on http://localhost:5173 (proxies /api)
+```
+
+For everyday use, build once and let the Bun server host it:
+
+```sh
+cd web && bun run build  # outputs web/dist, served by `bun run serve`
+```
+
+Day timeline colored by category, per-category bars, expandable per-app table. Auto-refreshes every 30s when viewing today.
+
 ## Categories
 
 Reports group time by category using regex rules in `categories.json` (created with defaults next to the database on first report). Each rule tests app name, window title, and/or URL — first match wins, no match is `uncategorized`. Rules are applied at read time, so editing them re-categorizes your entire history.
@@ -74,7 +90,7 @@ See `launchd/com.shaho.timetrack.plist` — a launchd agent with `KeepAlive` so 
 ## Roadmap
 
 - [x] Category rules (regex on app/title/url → "dev", "job-hunt", "distraction", …)
-- [ ] Web dashboard (Vite/React) reading the same SQLite file
+- [x] Web dashboard (Vite/React + local Bun API)
 - [ ] Menu bar presence (Tauri tray or SwiftBar script)
 - [ ] Browser extension for per-URL granularity
 - [ ] Daily summary export
