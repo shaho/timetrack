@@ -64,7 +64,7 @@ export function WeekChart({
               {day.active_ms > 0 && (
                 <text
                   x={x + barW / 2}
-                  y={H - (day.active_ms / maxMs) * H - 6}
+                  y={Math.max(H - (day.active_ms / maxMs) * H - 6, 12)}
                   textAnchor="middle"
                   className="axis-label"
                 >

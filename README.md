@@ -1,6 +1,12 @@
 # timetrack
 
-Local-first macOS time tracker. A small Bun daemon samples the frontmost window every few seconds, merges consecutive samples into intervals (the [ActivityWatch](https://activitywatch.net/) heartbeat trick), and stores everything in a local SQLite database. No cloud, no accounts, your data stays on your machine.
+Local-first macOS time tracker. A small Bun daemon samples the frontmost window every few seconds, merges consecutive samples into intervals (the [ActivityWatch](https://activitywatch.net/) heartbeat trick), and stores everything in a local SQLite database. No cloud, no accounts, no telemetry — your data never leaves your machine.
+
+**Stack:** Bun · TypeScript end-to-end · SQLite (`bun:sqlite`, WAL) · React + Vite dashboard · hand-rolled SVG charts (no chart library) · launchd for process supervision · zero native modules to compile.
+
+![Day view — timeline, categories, apps](docs/day.png)
+
+![Week view — stacked category bars per day](docs/week.png)
 
 ## Architecture
 
