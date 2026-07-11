@@ -1,10 +1,13 @@
 #!/usr/bin/env bash
-# Stop and remove the timetrack launchd agent. Data is untouched.
+# Stop and remove both timetrack launchd agents. Data is untouched.
 set -euo pipefail
 
-LABEL="com.shaho.timetrack"
-PLIST_DST="$HOME/Library/LaunchAgents/${LABEL}.plist"
+LABELS=("com.shaho.timetrack" "com.shaho.timetrack.server")
 
-launchctl bootout "gui/$(id -u)/$LABEL" 2>/dev/null || true
-rm -f "$PLIST_DST"
-echo "Agent stopped and removed. Database and categories.json kept."
+for label in "${LABELS[@]}"; do
+  launchctl bootout "gui/$(id -u)/$label" 2>/dev/null || true
+  rm -f "$HOME/Library/LaunchAgents/${label}.plist"
+  echo "removed: $label"
+done
+
+echo "Agents stopped and removed. Database and categories.json kept."

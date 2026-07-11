@@ -90,7 +90,9 @@ bun test
 ./scripts/launchd-uninstall.sh  # stops + removes it (data untouched)
 ```
 
-The agent starts the watcher at login and restarts it if it dies (`KeepAlive`). Logs go to `/tmp/timetrack.log` / `/tmp/timetrack.err`. If window titles come back empty after installing, grant the `bun` binary Screen Recording permission (TCC ties permissions to the spawning app; under launchd that's bun itself, not your terminal).
+Installs two agents: the watcher (`com.shaho.timetrack`) and the API/dashboard server (`com.shaho.timetrack.server`, port 4242). Both start at login and restart if they die (`KeepAlive`). Logs go to `/tmp/timetrack*.log` / `.err`. Build the dashboard once (`cd web && bun run build`) and it's permanently at [localhost:4242](http://localhost:4242).
+
+If window titles come back empty after installing, grant the `bun` binary Screen Recording permission (TCC ties permissions to the spawning app; under launchd that's bun itself, not your terminal).
 
 ## Roadmap
 

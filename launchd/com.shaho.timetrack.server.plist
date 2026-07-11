@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Template — do not install by hand. Run scripts/launchd-install.sh.
+  Serves the dashboard + API on http://localhost:4242.
+-->
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.shaho.timetrack.server</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>BUN_PATH</string>
+    <string>run</string>
+    <string>/Users/shaho/Desktop/dev/fable01/src/server.ts</string>
+  </array>
+  <key>WorkingDirectory</key>
+  <string>/Users/shaho/Desktop/dev/fable01</string>
+  <key>RunAtLoad</key>
+  <true/>
+  <key>KeepAlive</key>
+  <true/>
+  <key>ThrottleInterval</key>
+  <integer>10</integer>
+  <key>StandardOutPath</key>
+  <string>/tmp/timetrack-server.log</string>
+  <key>StandardErrorPath</key>
+  <string>/tmp/timetrack-server.err</string>
+</dict>
+</plist>
