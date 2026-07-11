@@ -51,6 +51,14 @@ Environment variables, all optional:
 | `TIMETRACK_AFK_SEC` | `120` | Idle seconds before counting as AFK |
 | `TIMETRACK_DB` | `~/Library/Application Support/timetrack/timetrack.db` | Database path |
 
+## Categories
+
+Reports group time by category using regex rules in `categories.json` (created with defaults next to the database on first report). Each rule tests app name, window title, and/or URL — first match wins, no match is `uncategorized`. Rules are applied at read time, so editing them re-categorizes your entire history.
+
+```json
+{ "category": "job-hunt", "url": "linkedin\\.com|indeed\\." }
+```
+
 ## Tests
 
 The heartbeat/AFK state machine is pure and platform-independent:
@@ -65,7 +73,7 @@ See `launchd/com.shaho.timetrack.plist` — a launchd agent with `KeepAlive` so 
 
 ## Roadmap
 
-- [ ] Category rules (regex on app/title → "work", "distraction", …)
+- [x] Category rules (regex on app/title/url → "dev", "job-hunt", "distraction", …)
 - [ ] Web dashboard (Vite/React) reading the same SQLite file
 - [ ] Menu bar presence (Tauri tray or SwiftBar script)
 - [ ] Browser extension for per-URL granularity

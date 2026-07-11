@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
-import { Tracker, AFK_APP, type Sample } from "../src/tracker";
-import type { IntervalRow, IntervalStore } from "../src/db";
+import { Tracker, AFK_APP, type Sample } from "../src/tracker.ts";
+import type { IntervalRow, IntervalStore } from "../src/db.ts";
 
 /** In-memory store so tracker logic is testable without SQLite/macOS. */
 function memStore(): IntervalStore & { rows: IntervalRow[] } {

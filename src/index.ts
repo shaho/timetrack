@@ -1,8 +1,8 @@
 import { activeWindow } from "get-windows";
-import { config } from "./config";
-import { makeStore, openDb } from "./db";
-import { idleSeconds } from "./idle";
-import { Tracker, type Sample } from "./tracker";
+import { config } from "./config.ts";
+import { makeStore, openDb } from "./db.ts";
+import { idleSeconds } from "./idle.ts";
+import { Tracker, type Sample } from "./tracker.ts";
 
 const db = openDb(config.dbPath);
 const store = makeStore(db);

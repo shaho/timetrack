@@ -4,9 +4,10 @@
  *   bun run report            → today
  *   bun run report 2026-07-09 → specific day
  */
-import { config } from "./config";
-import { makeStore, openDb } from "./db";
-import type { IntervalRow } from "./db";
+import { config } from "./config.ts";
+import { makeStore, openDb } from "./db.ts";
+import type { IntervalRow } from "./db.ts";
+import { loadRules, makeCategorizer, rulesPath } from "./categories.ts";
 
 const arg = process.argv[2];
 const day = arg ? new Date(`${arg}T00:00:00`) : new Date();
@@ -38,6 +39,24 @@ const afkMs = sum(clamped.filter((r) => r.is_afk));
 const totalMs = sum(active);
 
 console.log(`\n${day.toDateString()} — active ${fmt(totalMs)}, afk ${fmt(afkMs)}\n`);
+
+// ── Per-category totals ───────────────────────────────────────────
+const categorize = makeCategorizer(loadRules());
+const byCat = new Map<string, number>();
+for (const r of active) {
+  const cat = categorize(r.app, r.title, r.url);
+  byCat.set(cat, (byCat.get(cat) ?? 0) + (r.ended_at - r.started_at));
+}
+const cats = [...byCat.entries()].sort((a, b) => b[1] - a[1]);
+const maxCatMs = cats[0]?.[1] ?? 1;
+
+console.log(`Per category (rules: ${rulesPath()}):`);
+for (const [cat, ms] of cats) {
+  const pct = Math.round((ms / totalMs) * 100);
+  const bar = "█".repeat(Math.max(1, Math.round((ms / maxCatMs) * 30)));
+  console.log(`  ${cat.padEnd(16).slice(0, 16)} ${fmt(ms).padStart(8)} ${String(pct).padStart(3)}%  ${bar}`);
+}
+console.log();
 
 // ── Per-app totals ────────────────────────────────────────────────
 const byApp = new Map<string, number>();
