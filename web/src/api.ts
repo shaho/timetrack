@@ -19,13 +19,35 @@ export interface DayReport {
   intervals: ReportInterval[];
 }
 
-export async function fetchReport(date: string): Promise<DayReport> {
-  const res = await fetch(`/api/report?date=${encodeURIComponent(date)}`);
+export interface WeekDay {
+  date: string;
+  active_ms: number;
+  afk_ms: number;
+  categories: { name: string; ms: number }[];
+}
+
+export interface WeekReport {
+  start: string;
+  days: WeekDay[];
+  categories: { name: string; ms: number }[];
+  active_ms: number;
+}
+
+async function get<T>(url: string): Promise<T> {
+  const res = await fetch(url);
   if (!res.ok) {
     const body = (await res.json().catch(() => null)) as { error?: string } | null;
     throw new Error(body?.error ?? `API error ${res.status}`);
   }
-  return res.json() as Promise<DayReport>;
+  return res.json() as Promise<T>;
+}
+
+export function fetchReport(date: string): Promise<DayReport> {
+  return get<DayReport>(`/api/report?date=${encodeURIComponent(date)}`);
+}
+
+export function fetchWeek(date: string): Promise<WeekReport> {
+  return get<WeekReport>(`/api/week?date=${encodeURIComponent(date)}`);
 }
 
 export function fmtDuration(ms: number): string {
@@ -40,17 +62,17 @@ export function fmtTime(t: number): string {
 }
 
 const PALETTE: Record<string, string> = {
-  "job-hunt": "#e8590c",
-  dev: "#2f9e44",
-  design: "#9c36b5",
-  learning: "#1971c2",
-  communication: "#f08c00",
-  distraction: "#e03131",
-  uncategorized: "#868e96",
-  afk: "#343a40",
+  "job-hunt": "#ff8500",
+  dev: "#22c55e",
+  design: "#b855ff",
+  learning: "#0088ff",
+  communication: "#e0e0ff",
+  distraction: "#ef4444",
+  uncategorized: "#606080",
+  afk: "#1e293b",
 };
 
-const FALLBACK = ["#0ca678", "#6741d9", "#c2255c", "#3b5bdb", "#66a80f"];
+const FALLBACK = ["#14b8a6", "#8b5cf6", "#ec4899", "#3b82f6", "#84cc16"];
 
 export function categoryColor(name: string): string {
   const known = PALETTE[name];

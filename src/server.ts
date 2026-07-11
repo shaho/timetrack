@@ -91,6 +91,67 @@ function dayReport(dateStr: string): DayReport | null {
   };
 }
 
+export interface WeekDay {
+  date: string;
+  active_ms: number;
+  afk_ms: number;
+  categories: { name: string; ms: number }[];
+}
+
+export interface WeekReport {
+  /** Monday of the week, YYYY-MM-DD. */
+  start: string;
+  days: WeekDay[];
+  /** Weekly totals per category, sorted desc. */
+  categories: { name: string; ms: number }[];
+  active_ms: number;
+}
+
+/** Monday of the week containing `dateStr` (NL convention: weeks start Monday). */
+function mondayOf(dateStr: string): Date | null {
+  const d = new Date(`${dateStr}T12:00:00`);
+  if (Number.isNaN(d.getTime())) return null;
+  const dow = (d.getDay() + 6) % 7; // Mon=0 … Sun=6
+  d.setDate(d.getDate() - dow);
+  d.setHours(0, 0, 0, 0);
+  return d;
+}
+
+function weekReport(dateStr: string): WeekReport | null {
+  const monday = mondayOf(dateStr);
+  if (!monday) return null;
+
+  const days: WeekDay[] = [];
+  const totals = new Map<string, number>();
+  let activeMs = 0;
+
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(monday);
+    d.setDate(d.getDate() + i);
+    const day = dayReport(localDateString(d));
+    if (!day) continue;
+    days.push({
+      date: day.date,
+      active_ms: day.active_ms,
+      afk_ms: day.afk_ms,
+      categories: day.categories,
+    });
+    activeMs += day.active_ms;
+    for (const c of day.categories) {
+      totals.set(c.name, (totals.get(c.name) ?? 0) + c.ms);
+    }
+  }
+
+  return {
+    start: localDateString(monday),
+    days,
+    categories: [...totals]
+      .map(([name, ms]) => ({ name, ms }))
+      .sort((a, b) => b.ms - a.ms),
+    active_ms: activeMs,
+  };
+}
+
 function localDateString(d: Date): string {
   const y = d.getFullYear();
   const m = String(d.getMonth() + 1).padStart(2, "0");
@@ -121,6 +182,23 @@ Bun.serve({
         return Response.json(report);
       } catch (err) {
         console.error("[timetrack] /api/report failed:", err);
+        return Response.json(
+          { error: err instanceof Error ? err.message : String(err) },
+          { status: 500 },
+        );
+      }
+    }
+
+    if (url.pathname === "/api/week") {
+      try {
+        const date = url.searchParams.get("date") ?? localDateString(new Date());
+        const report = weekReport(date);
+        if (!report) {
+          return Response.json({ error: `invalid date: ${date}` }, { status: 400 });
+        }
+        return Response.json(report);
+      } catch (err) {
+        console.error("[timetrack] /api/week failed:", err);
         return Response.json(
           { error: err instanceof Error ? err.message : String(err) },
           { status: 500 },

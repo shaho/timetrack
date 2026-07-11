@@ -65,7 +65,7 @@ For everyday use, build once and let the Bun server host it:
 cd web && bun run build  # outputs web/dist, served by `bun run serve`
 ```
 
-Day timeline colored by category, per-category bars, expandable per-app table. Auto-refreshes every 30s when viewing today.
+Two views: **day** (timeline colored by category, per-category bars, expandable per-app table) and **week** (stacked per-day bars, Mon–Sun; click a day to open it). Auto-refreshes every 30s when viewing the current day/week.
 
 ## Categories
 
