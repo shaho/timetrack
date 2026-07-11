@@ -83,9 +83,14 @@ The heartbeat/AFK state machine is pure and platform-independent:
 bun test
 ```
 
-## Autostart (once you trust it)
+## Autostart
 
-See `launchd/com.shaho.timetrack.plist` — a launchd agent with `KeepAlive` so the daemon restarts if it dies. Instructions in the file.
+```sh
+./scripts/launchd-install.sh    # installs + starts the launchd agent
+./scripts/launchd-uninstall.sh  # stops + removes it (data untouched)
+```
+
+The agent starts the watcher at login and restarts it if it dies (`KeepAlive`). Logs go to `/tmp/timetrack.log` / `/tmp/timetrack.err`. If window titles come back empty after installing, grant the `bun` binary Screen Recording permission (TCC ties permissions to the spawning app; under launchd that's bun itself, not your terminal).
 
 ## Roadmap
 
